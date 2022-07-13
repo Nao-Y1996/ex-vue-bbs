@@ -56,10 +56,6 @@ export default class Bbs extends Vue {
   private name = "";
   // 投稿する記事の内容
   private content = "";
-  // コメント者名
-  private commenterName = "";
-  // コメント内容
-  private commentContent = "";
 
   /**
    * 全ての記事を取得する.
