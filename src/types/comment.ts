@@ -1,5 +1,5 @@
 /**
- * コメントを表す。
+ * コメントを表す.
  */
 export class Comment {
   constructor(

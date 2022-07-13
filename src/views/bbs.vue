@@ -15,18 +15,24 @@
     <button type="button" v-on:click="postArticle">記事投稿</button>
     <hr />
     <hr />
-    <div v-for="article of articles" v-bind:key="article.id">
+    <div v-for="(article, articleIdx) of articles" v-bind:key="article.id">
       <!-- 記事の表示 -->
       <div><span>投稿者名:</span>{{ article.name }}</div>
       <div><span>投稿内容:</span><br />{{ article.content }}</div>
-      <button type="button" v-on:click="deleteArticle(article.id)">
+      <button type="button" v-on:click="deleteArticle(articleIdx)">
         記事を削除
       </button>
       <!-- コメントの表示 -->
-      <dir v-for="comment of article.commentList" v-bind:key="comment.id">
+      <dir
+        v-for="(comment, commentIdx) of article.commentList"
+        v-bind:key="comment.id"
+      >
         <div><span>コメント者名:</span>{{ comment.name }}</div>
         <div><span>コメント:</span><br />{{ comment.content }}</div>
-        <button type="button" v-on:click="deleteComment(comment.id)">
+        <button
+          type="button"
+          v-on:click="deleteComment(articleIdx, commentIdx)"
+        >
           コメントを削除
         </button>
       </dir>
@@ -109,14 +115,17 @@ export default class Bbs extends Vue {
   /**
    * 記事を削除する.
    */
-  deleteArticle(articleId: number) {
-    this.$store.commit("deleteArticleById", { articleId: articleId });
+  deleteArticle(articleIdx: number) {
+    this.$store.commit("deleteArticle", { articleIdx: articleIdx });
   }
   /**
-   * コメントを削除する
+   * コメントを削除する.
    */
-  deleteComment(commentId: number) {
-    this.$store.commit("deleteCommentById", { commentId: commentId });
+  deleteComment(articleIdx: number, commentIdx: number) {
+    this.$store.commit("deleteComment", {
+      articleIdx: articleIdx,
+      commentIdx: commentIdx,
+    });
   }
 }
 </script>

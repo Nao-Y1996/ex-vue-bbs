@@ -23,7 +23,7 @@ export default new Vuex.Store({
     /**
      * 記事を作成する.
      *
-     * @param state
+     * @param state ステート
      * @param payload 投稿者名, 投稿内容を保持している
      */
     createArticle(state, payload) {
@@ -34,13 +34,13 @@ export default new Vuex.Store({
       }
       const articleId = Math.max(...articleIdList) + 1;
       const article = new Article(articleId, payload.name, payload.content, []);
-      state.articles.splice(0, 0, article);
+      state.articles.unshift(article);
       console.log(state.articles);
     },
     /**
      * コメントを作成する.
      *
-     * @param state
+     * @param state ステート
      * @param payload コメント者名, コメント内容, コメント対象の記事IDを保持している
      */
     createComment(state, payload) {
@@ -64,50 +64,59 @@ export default new Vuex.Store({
         (article) => article.id === payload.articleId
       )[0];
       // コメントを先頭に挿入する
-      article.commentList.splice(0, 0, comment);
+      article.commentList.unshift(comment);
     },
     /**
      * IDで記事を削除する.
      *
-     * @param state
+     * @param state ステート
      * @param payload 記事IDを保持している
      */
-    deleteArticleById(state, payload) {
+    deleteArticle(state, payload) {
       // 削除する記事のインデックスを取得する
-      let articleIdx = 0;
-      for (const [i, article] of state.articles.entries()) {
-        if (article.id === payload.articleId) {
-          articleIdx = i;
-          break;
-        }
-      }
+      // let articleIdx = 0;
+      // for (const [i, article] of state.articles.entries()) {
+      //   if (article.id === payload.articleId) {
+      //     articleIdx = i;
+      //     break;
+      //   }
+      // }
       // 記事を削除する
-      state.articles.splice(articleIdx, 1);
+      state.articles.splice(payload.articleIdx, 1);
     },
     /**
      * IDでコメントを削除する.
      *
-     * @param state
+     * @param state ステート
      * @param payload コメントIDを保持している
      */
-    deleteCommentById(state, payload) {
+    deleteComment(state, payload) {
       // 削除するコメントがある記事のインデックスとその記事内のコメントのインデックスを取得する
-      let articleIdx = 0;
-      let commentIdx = 0;
-      for (const [i, article] of state.articles.entries()) {
-        for (const [j, comment] of article.commentList.entries()) {
-          if (comment.id === payload.commentId) {
-            articleIdx = i;
-            commentIdx = j;
-            break;
-          }
-        }
-      }
+      // let articleIdx = 0;
+      // let commentIdx = 0;
+      // for (const [i, article] of state.articles.entries()) {
+      //   for (const [j, comment] of article.commentList.entries()) {
+      //     if (comment.id === payload.commentId) {
+      //       articleIdx = i;
+      //       commentIdx = j;
+      //       break;
+      //     }
+      //   }
+      // }
       // コメントを削除する
-      state.articles[articleIdx].commentList.splice(commentIdx, 1);
+      state.articles[payload.articleIdx].commentList.splice(
+        payload.commentIdx,
+        1
+      );
     },
   },
   getters: {
+    /**
+     * 全ての記事を取得する.
+     *
+     * @param state ステート
+     * @returns 記事の一覧情報
+     */
     getAllArticles(state) {
       return state.articles;
     },
