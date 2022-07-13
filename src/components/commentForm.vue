@@ -42,7 +42,8 @@ export default class CopmCommentForm extends Vue {
    * コメントを投稿する.
    */
   postComment(articleId: number) {
-    if (this.inputHasError()) {
+    const inputHasError = this.checkInput();
+    if (inputHasError) {
       return;
     } else {
       this.$store.commit("createComment", {
@@ -59,7 +60,7 @@ export default class CopmCommentForm extends Vue {
    *
    * @return バリデーションをクリアしたかどうかの真偽値
    */
-  inputHasError(): boolean {
+  checkInput(): boolean {
     // 名前の入力チェック
     if (this.commenterName === "") {
       this.nameError = "名前を入力してください";
