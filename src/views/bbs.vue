@@ -1,8 +1,12 @@
 <template>
   <div>
     <h1>vue掲示板</h1>
+    <span class="error" v-if="nameError != ''">{{ nameError }}<br /></span>
     <label for="name">投稿者名</label>
     <input type="text" name="name" id="name" v-model="name" /><br />
+    <span class="error" v-if="contentError != ''"
+      >{{ contentError }}<br
+    /></span>
     <label for="content">投稿内容</label><br />
     <textarea
       name="content"
@@ -56,6 +60,10 @@ export default class Bbs extends Vue {
   private name = "";
   // 投稿する記事の内容
   private content = "";
+  // 名前の未入力のエラーメッセージ
+  private nameError = "";
+  // 記事内容の未入力のエラーメッセージ
+  private contentError = "";
 
   /**
    * 全ての記事を取得する.
@@ -69,12 +77,42 @@ export default class Bbs extends Vue {
    * 記事を投稿する.
    */
   postArticle(): void {
-    this.$store.commit("createArticle", {
-      name: this.name,
-      content: this.content,
-    });
-    this.name = "";
-    this.content = "";
+    if (this.inputHasError()) {
+      return;
+    } else {
+      this.$store.commit("createArticle", {
+        name: this.name,
+        content: this.content,
+      });
+      this.name = "";
+      this.content = "";
+    }
+  }
+  /**
+   * 記事投稿の際に名前と投稿内容のバリデーションチェックをする.
+   *
+   * @return バリデーションをクリアしたかどうかの真偽値
+   */
+  inputHasError(): boolean {
+    // 名前の入力チェック
+    if (this.name === "") {
+      this.nameError = "名前を入力してください";
+    } else if (this.name.length > 50) {
+      this.nameError = "名前は50文字以内で入力してください";
+    } else {
+      this.nameError = "";
+    }
+    // 投稿内容の入力チェック
+    if (this.content === "") {
+      this.contentError = "投稿内容を入力してください";
+    } else {
+      this.contentError = "";
+    }
+    if (this.nameError !== "" || this.contentError !== "") {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -95,4 +133,8 @@ export default class Bbs extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.error {
+  color: red;
+}
+</style>
