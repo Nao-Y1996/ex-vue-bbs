@@ -1,8 +1,15 @@
+/**
+ * コメントを表す。
+ */
 export class Comment {
   constructor(
+    // コメントID
     private _id: number,
+    // コメント者名
     private _name: string,
+    // コメント内容
     private _content: string,
+    // コメントがつけられた記事のID
     private _articleId: number
   ) {}
 

@@ -1,9 +1,17 @@
 import { Comment } from "@/types/comment";
+/**
+ * 記事を表す.
+ *
+ */
 export class Article {
   constructor(
+    // 記事ID
     private _id: number,
+    // 投稿者名
     private _name: string,
+    // 記事内容
     private _content: string,
+    // 記事に付けられているコメントの一覧
     private _commentList: Array<Comment>
   ) {}
 

@@ -65,17 +65,27 @@ import { Article } from "@/types/article";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class Bbs extends Vue {
+  // 記事一覧
   private articles = new Array<Article>();
+  // 記事の投稿者名
   private name = "";
+  // 投稿する記事の内容
   private content = "";
+  // コメント者名
   private commenterName = "";
+  // コメント内容
   private commentContent = "";
 
+  /**
+   * 全ての記事を取得する.
+   */
   created() {
     this.articles = this.$store.getters.getAllArticles;
     console.log(this.articles);
   }
-
+  /**
+   * 記事を投稿する.
+   */
   postArticle(): void {
     this.$store.commit("createArticle", {
       name: this.name,
@@ -84,7 +94,9 @@ export default class Bbs extends Vue {
     this.name = "";
     this.content = "";
   }
-
+  /**
+   * コメントを投稿する.
+   */
   postComment(articleId: number) {
     this.$store.commit("createComment", {
       articleId: articleId,
@@ -94,11 +106,15 @@ export default class Bbs extends Vue {
     this.commenterName = "";
     this.commentContent = "";
   }
-
+  /**
+   * 記事を削除する.
+   */
   deleteArticle(articleId: number) {
     this.$store.commit("deleteArticleById", { articleId: articleId });
   }
-
+  /**
+   * コメントを削除する
+   */
   deleteComment(commentId: number) {
     this.$store.commit("deleteCommentById", { commentId: commentId });
   }

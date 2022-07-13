@@ -20,6 +20,12 @@ export default new Vuex.Store({
   }, // end state
   actions: {},
   mutations: {
+    /**
+     * 記事を作成する.
+     *
+     * @param state
+     * @param payload 投稿者名, 投稿内容を保持している
+     */
     createArticle(state, payload) {
       // すでに存在する記事IDの最大値+1を新たな記事IDとする
       const articleIdList = new Array<number>();
@@ -31,6 +37,12 @@ export default new Vuex.Store({
       state.articles.splice(0, 0, article);
       console.log(state.articles);
     },
+    /**
+     * コメントを作成する.
+     *
+     * @param state
+     * @param payload コメント者名, コメント内容, コメント対象の記事IDを保持している
+     */
     createComment(state, payload) {
       // すでに存在するコメントIDの最大値+1を新たなコメントIDとする
       const commentIdList = new Array<number>();
@@ -54,6 +66,12 @@ export default new Vuex.Store({
       // コメントを先頭に挿入する
       article.commentList.splice(0, 0, comment);
     },
+    /**
+     * IDで記事を削除する.
+     *
+     * @param state
+     * @param payload 記事IDを保持している
+     */
     deleteArticleById(state, payload) {
       // 削除する記事のインデックスを取得する
       let articleIdx = 0;
@@ -66,6 +84,12 @@ export default new Vuex.Store({
       // 記事を削除する
       state.articles.splice(articleIdx, 1);
     },
+    /**
+     * IDでコメントを削除する.
+     *
+     * @param state
+     * @param payload コメントIDを保持している
+     */
     deleteCommentById(state, payload) {
       // 削除するコメントがある記事のインデックスとその記事内のコメントのインデックスを取得する
       let articleIdx = 0;
