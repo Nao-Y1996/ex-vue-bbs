@@ -16,12 +16,42 @@
     <hr />
     <hr />
     <div v-for="article of articles" v-bind:key="article.id">
+      <!-- 記事の表示 -->
       <div><span>投稿者名:</span>{{ article.name }}</div>
       <div><span>投稿内容:</span><br />{{ article.content }}</div>
+      <button type="button" v-on:click="deleteArticle(article.id)">
+        記事を削除
+      </button>
+      <!-- コメントの表示 -->
       <dir v-for="comment of article.commentList" v-bind:key="comment.id">
         <div><span>コメント者名:</span>{{ comment.name }}</div>
         <div><span>コメント:</span><br />{{ comment.content }}</div>
       </dir>
+      <!-- コメント投稿フォームの表示 -->
+      <form action="">
+        <label for="commenterName">コメント者名</label>
+        <input
+          type="text"
+          name=""
+          id="commenterName"
+          v-model="commenterName"
+          :key="'commentNameFor' + article.id"
+        /><br />
+        <label for="commentContent">コメント内容</label><br />
+        <textarea
+          name=""
+          id=""
+          cols="30"
+          rows="10"
+          v-model="commentContent"
+          :key="'commentContentFor' + article.id"
+        ></textarea
+        ><br />
+        <button type="button" v-on:click="postComment(article.id)">
+          コメントする
+        </button>
+      </form>
+
       <hr />
     </div>
   </div>
@@ -35,6 +65,8 @@ export default class Bbs extends Vue {
   private articles = new Array<Article>();
   private name = "";
   private content = "";
+  private commenterName = "";
+  private commentContent = "";
 
   created() {
     this.articles = this.$store.getters.getAllArticles;
@@ -48,6 +80,20 @@ export default class Bbs extends Vue {
     });
     this.name = "";
     this.content = "";
+  }
+
+  postComment(articleId: number) {
+    this.$store.commit("createComment", {
+      articleId: articleId,
+      commenterName: this.commenterName,
+      commentContent: this.commentContent,
+    });
+    this.commenterName = "";
+    this.commentContent = "";
+  }
+
+  deleteArticle(articleId: number) {
+    this.$store.commit("deleteArticle", { articleId: articleId });
   }
 }
 </script>

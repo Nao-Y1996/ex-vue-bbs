@@ -21,10 +21,51 @@ export default new Vuex.Store({
   actions: {},
   mutations: {
     createArticle(state, payload) {
-      const articleId = state.articles.length + 1;
+      // すでに存在する記事IDの最大値+1を新たな記事IDとする
+      const articleIdList = new Array<number>();
+      for (const article of state.articles) {
+        articleIdList.push(article.id);
+      }
+      const articleId = Math.max(...articleIdList) + 1;
       const article = new Article(articleId, payload.name, payload.content, []);
       state.articles.splice(0, 0, article);
       console.log(state.articles);
+    },
+    createComment(state, payload) {
+      // すでに存在するコメントIDの最大値+1を新たなコメントIDとする
+      const commentIdList = new Array<number>();
+      for (const article of state.articles) {
+        for (const comment of article.commentList) {
+          commentIdList.push(comment.id);
+        }
+      }
+      const commentId = Math.max(...commentIdList) + 1;
+      // コメントを作成する
+      const comment = new Comment(
+        commentId,
+        payload.commenterName,
+        payload.commentContent,
+        payload.articleId
+      );
+      // コメントをつける記事を取得する
+      const article = state.articles.filter(
+        (article) => article.id === payload.articleId
+      )[0];
+      // コメントを先頭に挿入する
+      article.commentList.splice(0, 0, comment);
+    },
+    deleteArticle(state, payload) {
+      // 削除する記事のインデックスを取得する
+      let articleIdx = 0;
+      for (const article of state.articles) {
+        if (article.id === payload.articleId) {
+          break;
+        } else {
+          articleIdx++;
+        }
+      }
+      // 記事を削除する
+      state.articles.splice(articleIdx, 1);
     },
   },
   getters: {
