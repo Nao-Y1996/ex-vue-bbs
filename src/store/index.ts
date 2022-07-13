@@ -18,8 +18,13 @@ export default new Vuex.Store({
       ]),
     ],
   }, // end state
-  getters: {},
-  mutations: {},
   actions: {},
+  mutations: {},
+  getters: {
+    getAllArticles(state) {
+      console.log(`getters`);
+      return state.articles;
+    },
+  },
   modules: {},
 });
