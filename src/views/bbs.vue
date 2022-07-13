@@ -36,30 +36,7 @@
           コメントを削除
         </button>
       </dir>
-      <!-- コメント投稿フォームの表示 -->
-      <form action="">
-        <label for="commenterName">コメント者名</label>
-        <input
-          type="text"
-          name=""
-          id="commenterName"
-          v-model="commenterName"
-          :key="'commentNameFor' + article.id"
-        /><br />
-        <label for="commentContent">コメント内容</label><br />
-        <textarea
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          v-model="commentContent"
-          :key="'commentContentFor' + article.id"
-        ></textarea
-        ><br />
-        <button type="button" v-on:click="postComment(article.id)">
-          コメントする
-        </button>
-      </form>
+      <CopmCommentForm :articleId="article.id"></CopmCommentForm>
 
       <hr />
     </div>
@@ -69,7 +46,9 @@
 <script lang="ts">
 import { Article } from "@/types/article";
 import { Component, Vue } from "vue-property-decorator";
-@Component
+import CopmCommentForm from "@/components/commentForm.vue";
+
+@Component({ components: { CopmCommentForm } })
 export default class Bbs extends Vue {
   // 記事一覧
   private articles = new Array<Article>();
@@ -89,6 +68,7 @@ export default class Bbs extends Vue {
     this.articles = this.$store.getters.getAllArticles;
     console.log(this.articles);
   }
+
   /**
    * 記事を投稿する.
    */
@@ -100,18 +80,7 @@ export default class Bbs extends Vue {
     this.name = "";
     this.content = "";
   }
-  /**
-   * コメントを投稿する.
-   */
-  postComment(articleId: number) {
-    this.$store.commit("createComment", {
-      articleId: articleId,
-      commenterName: this.commenterName,
-      commentContent: this.commentContent,
-    });
-    this.commenterName = "";
-    this.commentContent = "";
-  }
+
   /**
    * 記事を削除する.
    */
