@@ -19,10 +19,16 @@ export default new Vuex.Store({
     ],
   }, // end state
   actions: {},
-  mutations: {},
+  mutations: {
+    createArticle(state, payload) {
+      const articleId = state.articles.length + 1;
+      const article = new Article(articleId, payload.name, payload.content, []);
+      state.articles.splice(0, 0, article);
+      console.log(state.articles);
+    },
+  },
   getters: {
     getAllArticles(state) {
-      console.log(`getters`);
       return state.articles;
     },
   },
