@@ -54,18 +54,33 @@ export default new Vuex.Store({
       // コメントを先頭に挿入する
       article.commentList.splice(0, 0, comment);
     },
-    deleteArticle(state, payload) {
+    deleteArticleById(state, payload) {
       // 削除する記事のインデックスを取得する
       let articleIdx = 0;
-      for (const article of state.articles) {
+      for (const [i, article] of state.articles.entries()) {
         if (article.id === payload.articleId) {
+          articleIdx = i;
           break;
-        } else {
-          articleIdx++;
         }
       }
       // 記事を削除する
       state.articles.splice(articleIdx, 1);
+    },
+    deleteCommentById(state, payload) {
+      // 削除するコメントがある記事のインデックスとその記事内のコメントのインデックスを取得する
+      let articleIdx = 0;
+      let commentIdx = 0;
+      for (const [i, article] of state.articles.entries()) {
+        for (const [j, comment] of article.commentList.entries()) {
+          if (comment.id === payload.commentId) {
+            articleIdx = i;
+            commentIdx = j;
+            break;
+          }
+        }
+      }
+      // コメントを削除する
+      state.articles[articleIdx].commentList.splice(commentIdx, 1);
     },
   },
   getters: {

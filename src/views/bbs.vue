@@ -26,6 +26,9 @@
       <dir v-for="comment of article.commentList" v-bind:key="comment.id">
         <div><span>コメント者名:</span>{{ comment.name }}</div>
         <div><span>コメント:</span><br />{{ comment.content }}</div>
+        <button type="button" v-on:click="deleteComment(comment.id)">
+          コメントを削除
+        </button>
       </dir>
       <!-- コメント投稿フォームの表示 -->
       <form action="">
@@ -93,7 +96,11 @@ export default class Bbs extends Vue {
   }
 
   deleteArticle(articleId: number) {
-    this.$store.commit("deleteArticle", { articleId: articleId });
+    this.$store.commit("deleteArticleById", { articleId: articleId });
+  }
+
+  deleteComment(commentId: number) {
+    this.$store.commit("deleteCommentById", { commentId: commentId });
   }
 }
 </script>
